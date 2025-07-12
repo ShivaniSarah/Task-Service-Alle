@@ -6,20 +6,20 @@ This project implements a simple **Task Management System** in Go using microser
 
 ## Features
 
-* Create, Read, Update, Delete (CRUD) tasks
-* Pagination on `GET /tasks`
-* Filtering by task `status`
-* Clean separation of concerns
-* Designed for easy scalability and future extensibility
+- Create, Read, Update, Delete (CRUD) tasks
+- Pagination on `GET /tasks`
+- Filtering by task `status`
+- Clean separation of concerns
+- Designed for easy scalability and future extensibility
 
 ---
 
 ## Tech Stack
 
-* Language: **Go**
-* Framework: **Gin** (HTTP server)
-* ORM: **GORM** (with SQLite)
-* Dependency Management: **Go Modules**
+- **Language**: Go
+- **Framework**: Gin (HTTP server)
+- **ORM**: GORM (with SQLite)
+- **Dependency Management**: Go Modules
 
 ---
 
@@ -35,44 +35,30 @@ This project implements a simple **Task Management System** in Go using microser
 ├── go.mod / go.sum      # Dependency management
 ```
 
-## Complete Project Structure
-
-```
-task-service/
-├── go.mod
-├── go.sum                  # generated after `go mod tidy`
-├── main.go
-├── handler/
-│   └── task_handler.go
-├── repository/
-│   ├── task.go
-│   └── task_repository.go
-├── service/
-│   └── task_service.go
-```
-
 ---
 
 ## Running the Service
 
 ```bash
 # Clone repository
-$ git clone https://github.com/pvnptl/task-service.git
-$ cd task-service
+git clone https://github.com/pvnptl/task-service.git
+cd task-service
 
-# Run
-$ go run main.go
+# Install dependencies
+go mod tidy
 
-# Server runs at http://localhost:8080
+# Run server
+go run main.go
+
+# Server will be available at http://localhost:8080
 ```
 
 ---
 
-##  API Documentation
 
 ### Create Task
 
-`POST /tasks`
+**POST** `/tasks`
 
 ```json
 {
@@ -81,26 +67,31 @@ $ go run main.go
 }
 ```
 
+---
+
 ### Get All Tasks (with pagination & filtering)
 
-`GET /tasks?status=Completed&limit=5&offset=10`
+**GET** `/tasks?status=Completed&limit=5&offset=10`
 
-Response:
+**Response:**
 
 ```json
 [
-  { "id": 3, "title": "sample title", "description": "test description" },
-  ...
+  { "id": 3, "title": "sample title", "description": "test description" }
 ]
 ```
 
+---
+
 ### Get Task by ID
 
-`GET /tasks/:id`
+**GET** `/tasks/:id`
+
+---
 
 ### Update Task
 
-`PATCH /tasks/:id`
+**PATCH** `/tasks/:id`
 
 ```json
 {
@@ -109,38 +100,58 @@ Response:
 }
 ```
 
+---
+
 ### Delete Task
 
-`DELETE /tasks/:id`
+**DELETE** `/tasks/:id`
 
 ---
 
 ## Design Decisions
 
-### 1. **Microservices Principles Applied**
+### 1. Microservices Principles Applied
 
-* **Single Responsibility**: Handlers only handle HTTP, Services handle logic, Repositories handle DB.
-* **Loose Coupling**: Interfaces are used to decouple layers.
-* **Scalable**: Easy to scale horizontally by containerizing (e.g., Docker + Kubernetes).
+- **Single Responsibility**: Handlers handle HTTP, services handle logic, repositories handle DB.
+- **Loose Coupling**: Interfaces are used to decouple layers.
+- **Scalable**: Ready for horizontal scaling via Docker/Kubernetes.
 
-### 2. **Pagination and Filtering**
+### 2. Pagination and Filtering
 
-* Query params: `GET /tasks?status=Completed&limit=10&offset=0`
-* Implemented at DB query level (efficient for large datasets)
+- Supported via query params:  
+  `GET /tasks?status=Completed&limit=10&offset=0`
+- Efficient DB-level filtering and paging
 
-### 3. **Extensibility**
+### 3. Extensibility
 
-* Easy to add a **User Service** in future (e.g., for task ownership)
-* Interface-based design allows switching databases or transport protocols
+- Easy to add a **User Service** (e.g., for task ownership)
+- Interfaces allow easy switch of DBs or transport layers
+
+### 4. Scalability
+
+- The service is stateless and suitable for horizontal scaling.
+
+- Replace local SQLite with a shared DB like PostgreSQL or MySQL.
+
+- Run multiple instances using Docker or Kubernetes.
+
+- Use a load balancer (e.g., NGINX, cloud LB) to distribute traffic.
+
+- Kubernetes can manage replicas, autoscaling, and failovers.
+
+- Add a /healthz endpoint for readiness and liveness checks.
+
+- Centralized logging via ELK/Grafana is recommended.
+
+- Easily extendable to microservice architecture with gRPC or message queues.
+
 
 ---
 
 ## Inter-Service Communication (Future Scope)
 
-If adding a **User Service**, here are options for communication:
-
 | Option     | Use Case                                     |
-| ---------- | -------------------------------------------- |
+|------------|----------------------------------------------|
 | REST       | For human-readable APIs, external services   |
 | gRPC       | For internal high-performance communication  |
 | Kafka/NATS | For async updates/events like task completed |
@@ -149,164 +160,170 @@ If adding a **User Service**, here are options for communication:
 
 ## Author
 
-Shivani Agrawal
+**Shivani Agrawal [ShivaniSarah@github]**
 
 ---
 
 
-## Commands ran
 
- brew install sqlite
- brew install go
- go mod tidy
- go run main.go
+## Commands Used
 
+```bash
+brew install sqlite
+brew install go
+go mod tidy
+go run main.go
+```
 
+### Generate Mocks
 
-
+```bash
 go install github.com/vektra/mockery/v2@latest
-go env GOPATH
 export PATH=$PATH:$(go env GOPATH)/bin
 mockery --name=TaskService --dir=service --output=service/mocks --outpkg=mocks
+```
 
+### Run Tests
 
- go get github.com/stretchr/testify
- go test ./handler
- go test ./...
+```bash
+go get github.com/stretchr/testify
+go test ./handler
+go test ./...
+```
 
-## Commands ran for sqlite3
+---
 
+## SQLite Commands
+
+```bash
 sqlite3 tasks.db
 .tables
 SELECT * FROM tasks;
 .quit
+```
+
+---
 
 
-## Manual Testing Steps
+## API Documentation
 
-1. Create a Task
 
-`POST http://localhost:8080/tasks`
+### 1. Create a Task
 
-Body (JSON):
+**POST** `http://localhost:8080/tasks`
+
+**Request:**
 
 ```json
 {
   "title": "Finish Go Assignment",
   "description": "Pending"
 }
-```json
+```
 
-Response
+**Response:**
 
 ```json
 {
-    "id": 28,
-    "title": "Task last",
-    "description": "My last task",
-    "status": "CREATED"
+  "id": 28,
+  "title": "Task last",
+  "description": "My last task",
+  "status": "CREATED"
 }
-```json
-2. Get All Tasks
+```
 
-`GET http://localhost:8080/tasks`
+---
 
-Query Params (optional):
+### 2. Get All Tasks
 
-status=Pending
+**GET** `http://localhost:8080/tasks?status=Pending&limit=5&offset=0`
 
-pageSize=5
-
-page=1
-
-Example:
-
-http://localhost:8080/tasks?status=Pending&limit=5&offset=0
-
-Response 
+**Response:**
 
 ```json
 [
-    {
-        "id": 3,
-        "title": "Task 3",
-        "description": null,
-        "status": "Created"
-    },
-    {
-        "id": 4,
-        "title": "Task 4",
-        "description": null,
-        "status": "Created"
-    }
+  {
+    "id": 3,
+    "title": "Task 3",
+    "description": null,
+    "status": "Created"
+  },
+  {
+    "id": 4,
+    "title": "Task 4",
+    "description": null,
+    "status": "Created"
+  }
 ]
-```json
+```
 
-3. Get Task by ID
+---
 
-`GET http://localhost:8080/tasks/1`
+### 3. Get Task by ID
 
-Response
+**GET** `http://localhost:8080/tasks/1`
 
-```json
-{
-    "id": 26,
-    "title": "Finish Go Assignment Updated",
-    "description": "Changed the description",
-    "status": "MODIFIED"
-}
-```json
+**Response:**
 
-4. Update a Task
-
-`PATCH http://localhost:8080/tasks/1`
-
-To modify:
-
-Body (JSON):
 ```json
 {
+  "id": 26,
   "title": "Finish Go Assignment Updated",
-  
+  "description": "Changed the description",
+  "status": "MODIFIED"
 }
-```json
+```
 
-Response
+---
+
+### 4. Update a Task
+
+**PATCH** `http://localhost:8080/tasks/1`
+
+#### Modify Title
 
 ```json
 {
-    "id": 26,
-    "title": "Finish Go Assignment more",
-    "description": "sample",
-    "status": "MODIFIED"
+  "title": "Finish Go Assignment Updated"
 }
-```json
+```
 
-To mark as completed:
-
-`PATCH http://localhost:8080/tasks/1`
+**Response:**
 
 ```json
-Body (JSON):
+{
+  "id": 26,
+  "title": "Finish Go Assignment more",
+  "description": "sample",
+  "status": "MODIFIED"
+}
+```
+
+#### Mark as Completed
+
+```json
 {
   "title": "Finish Go Assignment Updated",
   "status": "COMPLETED"
 }
-```json
+```
 
-Response
+**Response:**
 
 ```json
 {
-    "id": 26,
-    "title": "Finish Go Assignment more",
-    "description": "sample",
-    "status": "COMPLETED"
+  "id": 26,
+  "title": "Finish Go Assignment more",
+  "description": "sample",
+  "status": "COMPLETED"
 }
-```json
+```
 
-5. Delete a Task
+---
 
-`
-DELETE http://localhost:8080/tasks/1
-`
+### 5. Delete a Task
+
+**DELETE** `http://localhost:8080/tasks/1`
+
+---
+
