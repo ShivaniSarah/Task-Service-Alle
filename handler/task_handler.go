@@ -54,3 +54,11 @@ func (h *TaskHandler) GetAll(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, tasks)
 }
+
+func (r *taskRepository) FindByID(id uint) (*Task, error) {
+	var task Task
+	if err := r.db.First(&task, id).Error; err != nil {
+		return nil, err
+	}
+	return &task, nil
+}
