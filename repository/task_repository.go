@@ -44,3 +44,7 @@ func (r *taskRepository) FindByID(id uint) (*Task, error) {
 func (r *taskRepository) Delete(id uint) error {
 	return r.db.Delete(&Task{}, id).Error
 }
+
+func (r *taskRepository) Update(task *Task) error {
+	return r.db.Save(task).Error
+}
