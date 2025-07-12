@@ -40,3 +40,7 @@ func (r *taskRepository) FindByID(id uint) (*Task, error) {
 	}
 	return &task, nil
 }
+
+func (r *taskRepository) Delete(id uint) error {
+	return r.db.Delete(&Task{}, id).Error
+}

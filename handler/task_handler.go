@@ -62,3 +62,9 @@ func (r *taskRepository) FindByID(id uint) (*Task, error) {
 	}
 	return &task, nil
 }
+
+func (h *TaskHandler) Delete(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	h.service.Delete(uint(id))
+	c.Status(http.StatusNoContent)
+}

@@ -74,6 +74,23 @@ func TestGetByID(t *testing.T) {
 	mockRepo.AssertExpectations(t)
 }
 
+func (m *MockTaskRepository) Delete(id uint) error {
+	args := m.Called(id)
+	return args.Error(0)
+}
+
+func TestDelete(t *testing.T) {
+	mockRepo := new(MockTaskRepository)
+	svc := service.NewTaskService(mockRepo)
+
+	mockRepo.On("Delete", uint(1)).Return(nil)
+
+	err := svc.Delete(1)
+
+	assert.NoError(t, err)
+	mockRepo.AssertExpectations(t)
+}
+
 func ptr(s string) *string {
 	return &s
 }
