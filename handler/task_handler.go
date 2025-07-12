@@ -55,12 +55,14 @@ func (h *TaskHandler) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, tasks)
 }
 
-func (r *taskRepository) FindByID(id uint) (*Task, error) {
-	var task Task
-	if err := r.db.First(&task, id).Error; err != nil {
-		return nil, err
+func (h *TaskHandler) GetByID(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	task, err := h.service.GetByID(uint(id))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Task not found"})
+		return
 	}
-	return &task, nil
+	c.JSON(http.StatusOK, task)
 }
 
 func (h *TaskHandler) Delete(c *gin.Context) {
