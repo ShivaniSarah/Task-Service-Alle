@@ -28,3 +28,6 @@ func (s *taskService) Create(task *repository.Task) error {
 	return s.repo.Create(task)
 }
 
+func (s *taskService) GetAll(status string, pageSize, page int) ([]repository.Task, error) {
+	return s.repo.FindAll(status, pageSize, page)
+}

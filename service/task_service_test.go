@@ -36,7 +36,24 @@ func TestCreate(t *testing.T) {
 	mockRepo.AssertExpectations(t)
 }
 
+func (m *MockTaskRepository) FindAll(status string, pageSize, page int) ([]repository.Task, error) {
+	args := m.Called(status, pageSize, page)
+	return args.Get(0).([]repository.Task), args.Error(1)
+}
 
+func TestGetAll(t *testing.T) {
+	mockRepo := new(MockTaskRepository)
+	svc := service.NewTaskService(mockRepo)
+
+	mockTasks := []repository.Task{{ID: 1}, {ID: 2}}
+	mockRepo.On("FindAll", "MODIFIED", 10, 1).Return(mockTasks, nil)
+
+	result, err := svc.GetAll("MODIFIED", 10, 1)
+
+	assert.NoError(t, err)
+	assert.Equal(t, 2, len(result))
+	mockRepo.AssertExpectations(t)
+}
 
 func ptr(s string) *string {
 	return &s
