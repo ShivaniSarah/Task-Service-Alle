@@ -41,7 +41,8 @@ This project implements a simple **Task Management System** in Go using microser
 
 ```bash
 # Clone repository
-git clone https://github.com/pvnptl/task-service.git
+git clone  https://github.com/ShivaniSarah/Task-Service-Alle.git
+
 cd task-service
 
 # Install dependencies
@@ -52,59 +53,6 @@ go run main.go
 
 # Server will be available at http://localhost:8080
 ```
-
----
-
-
-### Create Task
-
-**POST** `/tasks`
-
-```json
-{
-  "title": "Write Go service",
-  "status": "Pending"
-}
-```
-
----
-
-### Get All Tasks (with pagination & filtering)
-
-**GET** `/tasks?status=Completed&limit=5&offset=10`
-
-**Response:**
-
-```json
-[
-  { "id": 3, "title": "sample title", "description": "test description" }
-]
-```
-
----
-
-### Get Task by ID
-
-**GET** `/tasks/:id`
-
----
-
-### Update Task
-
-**PATCH** `/tasks/:id`
-
-```json
-{
-  "title": "Write unit tests",
-  "status": "COMPLETED"
-}
-```
-
----
-
-### Delete Task
-
-**DELETE** `/tasks/:id`
 
 ---
 
