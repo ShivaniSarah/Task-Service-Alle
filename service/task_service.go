@@ -35,3 +35,7 @@ func (s *taskService) GetAll(status string, pageSize, page int) ([]repository.Ta
 func (s *taskService) GetByID(id uint) (*repository.Task, error) {
 	return s.repo.FindByID(id)
 }
+
+func (s *taskService) Delete(id uint) error {
+	return s.repo.Delete(id)
+}
