@@ -186,27 +186,30 @@ SELECT * FROM tasks;
 
 1. Create a Task
 
-POST http://localhost:8080/tasks
+`POST http://localhost:8080/tasks`
 
 Body (JSON):
 
+```json
 {
   "title": "Finish Go Assignment",
   "description": "Pending"
 }
+```json
 
 Response
 
+```json
 {
     "id": 28,
     "title": "Task last",
     "description": "My last task",
     "status": "CREATED"
 }
-
+```json
 2. Get All Tasks
 
-GET http://localhost:8080/tasks
+`GET http://localhost:8080/tasks`
 
 Query Params (optional):
 
@@ -222,6 +225,7 @@ http://localhost:8080/tasks?status=Pending&limit=5&offset=0
 
 Response 
 
+```json
 [
     {
         "id": 3,
@@ -236,60 +240,73 @@ Response
         "status": "Created"
     }
 ]
+```json
 
 3. Get Task by ID
 
-GET http://localhost:8080/tasks/1
+`GET http://localhost:8080/tasks/1`
 
 Response
 
+```json
 {
     "id": 26,
     "title": "Finish Go Assignment Updated",
     "description": "Changed the description",
     "status": "MODIFIED"
 }
+```json
 
 4. Update a Task
 
-PATCH http://localhost:8080/tasks/1
+`PATCH http://localhost:8080/tasks/1`
 
 To modify:
 
 Body (JSON):
+```json
 {
   "title": "Finish Go Assignment Updated",
   
 }
+```json
 
 Response
 
+```json
 {
     "id": 26,
     "title": "Finish Go Assignment more",
     "description": "sample",
     "status": "MODIFIED"
 }
+```json
 
 To mark as completed:
 
-PATCH http://localhost:8080/tasks/1
+`PATCH http://localhost:8080/tasks/1`
 
+```json
 Body (JSON):
 {
   "title": "Finish Go Assignment Updated",
   "status": "COMPLETED"
 }
+```json
 
 Response
 
+```json
 {
     "id": 26,
     "title": "Finish Go Assignment more",
     "description": "sample",
     "status": "COMPLETED"
 }
+```json
 
 5. Delete a Task
 
+`
 DELETE http://localhost:8080/tasks/1
+`
