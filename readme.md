@@ -37,6 +37,26 @@ This project implements a simple **Task Management System** in Go using microser
 
 ---
 
+##  📁 Complete Project Structure
+
+
+```
+task-service/
+├── go.mod
+├── go.sum                  # generated after `go mod tidy`
+├── main.go
+├── handler/
+│   └── task_handler.go
+├── repository/
+│   ├── task.go
+│   └── task_repository.go
+├── service/
+│   └── task_service.go
+
+```
+
+---
+
 ## Running the Service
 
 ```bash
