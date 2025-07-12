@@ -55,6 +55,25 @@ func TestGetAll(t *testing.T) {
 	mockRepo.AssertExpectations(t)
 }
 
+func (m *MockTaskRepository) FindByID(id uint) (*repository.Task, error) {
+	args := m.Called(id)
+	return args.Get(0).(*repository.Task), args.Error(1)
+}
+
+func TestGetByID(t *testing.T) {
+	mockRepo := new(MockTaskRepository)
+	svc := service.NewTaskService(mockRepo)
+
+	task := &repository.Task{ID: 1}
+	mockRepo.On("FindByID", uint(1)).Return(task, nil)
+
+	result, err := svc.GetByID(1)
+
+	assert.NoError(t, err)
+	assert.Equal(t, uint(1), result.ID)
+	mockRepo.AssertExpectations(t)
+}
+
 func ptr(s string) *string {
 	return &s
 }

@@ -31,3 +31,7 @@ func (s *taskService) Create(task *repository.Task) error {
 func (s *taskService) GetAll(status string, pageSize, page int) ([]repository.Task, error) {
 	return s.repo.FindAll(status, pageSize, page)
 }
+
+func (s *taskService) GetByID(id uint) (*repository.Task, error) {
+	return s.repo.FindByID(id)
+}

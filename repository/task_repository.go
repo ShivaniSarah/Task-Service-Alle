@@ -32,3 +32,11 @@ func (r *taskRepository) FindAll(status string, limit, offset int) ([]Task, erro
 	err := query.Find(&tasks).Error
 	return tasks, err
 }
+
+func (r *taskRepository) FindByID(id uint) (*Task, error) {
+	var task Task
+	if err := r.db.First(&task, id).Error; err != nil {
+		return nil, err
+	}
+	return &task, nil
+}
