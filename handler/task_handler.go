@@ -35,4 +35,22 @@ func (h *TaskHandler) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, task)
 }
 
-
+func (h *TaskHandler) GetAll(c *gin.Context) {
+	status := c.Query("status")
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	if page <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Page number must be greater than 0"})
+		return
+	}
+	if pageSize < 0 || pageSize > 100 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Page size must be between 1 and 100 "})
+		return
+	}
+	tasks, err := h.service.GetAll(status, pageSize, page)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, tasks)
+}
