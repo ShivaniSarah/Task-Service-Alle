@@ -91,6 +91,46 @@ func TestDelete(t *testing.T) {
 	mockRepo.AssertExpectations(t)
 }
 
+func (m *MockTaskRepository) Update(task *repository.Task) error {
+	args := m.Called(task)
+	return args.Error(0)
+}
+
+func TestUpdate_ValidCompletedStatus(t *testing.T) {
+	mockRepo := new(MockTaskRepository)
+	svc := service.NewTaskService(mockRepo)
+
+	existing := &repository.Task{ID: 1}
+	status := "COMPLETED"
+	input := &repository.Task{ID: 1, Status: &status}
+
+	mockRepo.On("FindByID", uint(1)).Return(existing, nil)
+	mockRepo.On("Update", mock.AnythingOfType("*repository.Task")).Return(nil)
+
+	updated, err := svc.Update(input)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "COMPLETED", *updated.Status)
+	mockRepo.AssertExpectations(t)
+}
+
+func TestUpdate_InvalidStatus(t *testing.T) {
+	mockRepo := new(MockTaskRepository)
+	svc := service.NewTaskService(mockRepo)
+
+	existing := &repository.Task{ID: 1}
+	status := "STARTED"
+	input := &repository.Task{ID: 1, Status: &status}
+
+	mockRepo.On("FindByID", uint(1)).Return(existing, nil)
+
+	_, err := svc.Update(input)
+
+	assert.Error(t, err)
+	assert.Equal(t, "status should be COMPLETED", err.Error())
+	mockRepo.AssertExpectations(t)
+}
+
 func ptr(s string) *string {
 	return &s
 }

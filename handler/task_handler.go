@@ -68,3 +68,24 @@ func (h *TaskHandler) Delete(c *gin.Context) {
 	h.service.Delete(uint(id))
 	c.Status(http.StatusNoContent)
 }
+
+func (h *TaskHandler) Update(c *gin.Context) {
+	var input repository.Task
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if input.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id must be provided in the request body"})
+		return
+	}
+
+	updatedTask, err := h.service.Update(&input)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedTask)
+}
