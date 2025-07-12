@@ -254,6 +254,27 @@ Response
 
 PATCH http://localhost:8080/tasks/1
 
+To modify:
+
+Body (JSON):
+{
+  "title": "Finish Go Assignment Updated",
+  
+}
+
+Response
+
+{
+    "id": 26,
+    "title": "Finish Go Assignment more",
+    "description": "sample",
+    "status": "MODIFIED"
+}
+
+To mark as completed:
+
+PATCH http://localhost:8080/tasks/1
+
 Body (JSON):
 {
   "title": "Finish Go Assignment Updated",

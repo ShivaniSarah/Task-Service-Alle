@@ -23,7 +23,7 @@ func NewTaskService(r repository.TaskRepository) TaskService {
 }
 
 func (s *taskService) Create(task *repository.Task) error {
-	status := string(repository.StatusModified)
+	status := string(repository.StatusCreated)
 	task.Status = &status
 	return s.repo.Create(task)
 }
