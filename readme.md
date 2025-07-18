@@ -294,5 +294,21 @@ SELECT * FROM tasks;
 
 **DELETE** `http://localhost:8080/tasks/1`
 
+
+## Drawbacks abd Future Enhancements:
+
+1. Pagination not has hasNext , pageISize, pageNumber, totalRecords
+
+2. DTO and entity class
+
+3. Middleware in golang instead of aspect (custom annotations in java)
+
+4. If it is marked as Completed , don’t mark it completed multiple  times
+
+5. Validation for update not done
+
+
 ---
+
+
 
