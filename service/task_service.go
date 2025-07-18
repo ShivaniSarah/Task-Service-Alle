@@ -24,7 +24,7 @@ func NewTaskService(r repository.TaskRepository) TaskService {
 
 func (s *taskService) Create(task *repository.Task) error {
 	status := string(repository.StatusCreated)
-	task.Status = &status
+	task.Status = &status	
 	return s.repo.Create(task)
 }
 
@@ -42,7 +42,7 @@ func (s *taskService) Delete(id uint) error {
 
 
 func (s *taskService) Update(input *repository.Task) (*repository.Task, error) {
-	existingTask, err := s.repo.FindByID(input.ID)
+	existingTask, err := s.repo.FindByID(*input.ID)
 	if err != nil {
 		return nil, fmt.Errorf("task not found")
 	}

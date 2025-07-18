@@ -139,6 +139,7 @@ go run main.go
 ```bash
 brew install sqlite
 brew install go
+go mod init task-service
 go mod tidy
 go run main.go
 ```

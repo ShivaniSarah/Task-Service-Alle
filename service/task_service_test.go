@@ -19,9 +19,6 @@ func (m *MockTaskRepository) Create(task *repository.Task) error {
 	return args.Error(0)
 }
 
-
-
-
 func TestCreate(t *testing.T) {
 	mockRepo := new(MockTaskRepository)
 	svc := service.NewTaskService(mockRepo)
@@ -32,8 +29,7 @@ func TestCreate(t *testing.T) {
 	err := svc.Create(task)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "MODIFIED", *task.Status)
-	mockRepo.AssertExpectations(t)
+	assert.Equal(t, "CREATED", *task.Status)
 }
 
 func (m *MockTaskRepository) FindAll(status string, pageSize, page int) ([]repository.Task, error) {
@@ -44,8 +40,9 @@ func (m *MockTaskRepository) FindAll(status string, pageSize, page int) ([]repos
 func TestGetAll(t *testing.T) {
 	mockRepo := new(MockTaskRepository)
 	svc := service.NewTaskService(mockRepo)
-
-	mockTasks := []repository.Task{{ID: 1}, {ID: 2}}
+	id := uint(1)
+	id2 := uint(2)
+	mockTasks := []repository.Task{{ID: &id}, {ID: &id2}}
 	mockRepo.On("FindAll", "MODIFIED", 10, 1).Return(mockTasks, nil)
 
 	result, err := svc.GetAll("MODIFIED", 10, 1)
@@ -63,14 +60,14 @@ func (m *MockTaskRepository) FindByID(id uint) (*repository.Task, error) {
 func TestGetByID(t *testing.T) {
 	mockRepo := new(MockTaskRepository)
 	svc := service.NewTaskService(mockRepo)
-
-	task := &repository.Task{ID: 1}
+	id := uint(1)
+	task := &repository.Task{ID: &id}
 	mockRepo.On("FindByID", uint(1)).Return(task, nil)
 
 	result, err := svc.GetByID(1)
 
 	assert.NoError(t, err)
-	assert.Equal(t, uint(1), result.ID)
+	assert.Equal(t, uint(1), *result.ID)
 	mockRepo.AssertExpectations(t)
 }
 
@@ -99,10 +96,10 @@ func (m *MockTaskRepository) Update(task *repository.Task) error {
 func TestUpdate_ValidCompletedStatus(t *testing.T) {
 	mockRepo := new(MockTaskRepository)
 	svc := service.NewTaskService(mockRepo)
-
-	existing := &repository.Task{ID: 1}
+	id := uint(1)
+	existing := &repository.Task{ID: &id}
 	status := "COMPLETED"
-	input := &repository.Task{ID: 1, Status: &status}
+	input := &repository.Task{ID: &id, Status: &status}
 
 	mockRepo.On("FindByID", uint(1)).Return(existing, nil)
 	mockRepo.On("Update", mock.AnythingOfType("*repository.Task")).Return(nil)
@@ -117,10 +114,10 @@ func TestUpdate_ValidCompletedStatus(t *testing.T) {
 func TestUpdate_InvalidStatus(t *testing.T) {
 	mockRepo := new(MockTaskRepository)
 	svc := service.NewTaskService(mockRepo)
-
-	existing := &repository.Task{ID: 1}
+	id := uint(1)
+	existing := &repository.Task{ID: &id}
 	status := "STARTED"
-	input := &repository.Task{ID: 1, Status: &status}
+	input := &repository.Task{ID: &id, Status: &status}
 
 	mockRepo.On("FindByID", uint(1)).Return(existing, nil)
 

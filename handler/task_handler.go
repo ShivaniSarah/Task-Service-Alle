@@ -78,7 +78,7 @@ func (h *TaskHandler) Update(c *gin.Context) {
 		return
 	}
 
-	if input.ID == 0 {
+	if input.ID == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "id must be provided in the request body"})
 		return
 	}
