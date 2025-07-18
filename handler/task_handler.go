@@ -91,3 +91,4 @@ func (h *TaskHandler) Update(c *gin.Context) {
 
 	c.JSON(http.StatusOK, updatedTask)
 }
+
